@@ -1,0 +1,19 @@
+{
+  "name": "graphql-javascript",
+  "version": "1.0.0",
+  "description": "Building GraphQL APIs with javascript",
+  "main": "server.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeeshantariq08/GraphQL-Javascript.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zeeshantariq08/GraphQL-Javascript/issues"
+  },
+  "homepage": "https://github.com/zeeshantariq08/GraphQL-Javascript#readme"
+}
