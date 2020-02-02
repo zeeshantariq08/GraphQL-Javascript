@@ -46,13 +46,28 @@ const books = [
 	},
 ]
 
+const AuthorType = new GraphQLObjectType({
+	name:"Author",
+	description:"This Represent a List of Authors",
+	fields:()=>({
+		id:{type:GraphQLNonNull(GraphQLInt)},
+		name:{type:GraphQLString}
+	})
+})
+
 const BookType = new GraphQLObjectType({
 	name:"Book",
 	description:"This Represent a Book written by an author",
 	fields:()=>({
 		id:{type:GraphQLNonNull(GraphQLInt)},
 		name:{type:GraphQLString},
-		authorId:{type:GraphQLNonNull(GraphQLInt)}
+		authorId:{type:GraphQLNonNull(GraphQLInt)},
+		author:{
+			type:AuthorType,
+			resolve:(books)=>{
+				return authors.find(author => author.id === books.authorId)
+			}
+		}
 	})
 })
 
