@@ -51,7 +51,13 @@ const AuthorType = new GraphQLObjectType({
 	description:"This Represent a List of Authors",
 	fields:()=>({
 		id:{type:GraphQLNonNull(GraphQLInt)},
-		name:{type:GraphQLString}
+		name:{type:GraphQLString},
+		book:{
+			type:BookType,
+			resolve:(authors)=>{
+				return books.find(book =>book.authorId === authors.id)
+			}
+		}
 	})
 })
 
