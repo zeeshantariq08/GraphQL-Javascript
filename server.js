@@ -4,7 +4,11 @@
  const{
  	GraphQLSchema,
  	GraphQLObjectType,
- 	GraphQLString
+ 	GraphQLString,
+ 	GraphQLList,
+ 	GraphQLInt,
+ 	GraphQLNonNull,
+
  }=require('graphql')
 
 const authors = [
@@ -42,18 +46,67 @@ const books = [
 	},
 ]
 
- const schema = new GraphQLSchema({
- 	query: new GraphQLObjectType({
- 		name:'HelloWorld',
- 		fields:()=>({
- 			message:{
- 				type: GraphQLString,
- 				resolve:() => 'Hello World'
- 			}
+const AuthorType = new GraphQLObjectType({
+	name:"Author",
+	description:"This Represent a List of Authors",
+	fields:()=>({
+		id:{type:GraphQLNonNull(GraphQLInt)},
+		name:{type:GraphQLString}
+	})
+})
+
+const BookType = new GraphQLObjectType({
+	name:"Book",
+	description:"This Represent a Book written by an author",
+	fields:()=>({
+		id:{type:GraphQLNonNull(GraphQLInt)},
+		name:{type:GraphQLString},
+		authorId:{type:GraphQLNonNull(GraphQLInt)},
+		author:{
+			type:AuthorType,
+			resolve:(books)=>{
+				return authors.find(author => author.id === books.authorId)
+			}
+		}
+	})
+})
+
+const RootQueryType = new GraphQLObjectType({
+	name:"Query",
+	description:"Root Query",
+	fields:()=>({
+		books:{
+			type:new GraphQLList(BookType),
+			description:"List of All Books",
+			resolve:()=> books
+		},
+		authors:{
+			type:new GraphQLList(AuthorType),
+			description:"List of All Authors",
+			resolve:()=> authors
+		},
+
+	})
+})
+
+const schema = new GraphQLSchema({
+	query:RootQueryType
+})
+
+
+
+ // const schema = new GraphQLSchema({
+ // 	query: new GraphQLObjectType({
+ // 		name:'HelloWorld',
+ // 		fields:()=>({
+ // 			message:{
+ // 				type: GraphQLString,
+ // 				resolve:() => 'Hello World'
+ // 			}
  			
- 		})
- 	})
- })
+ // 		})
+ // 	})
+ // })
  const app = express()
 
  app.use('/graphql',expressGraphQl({
